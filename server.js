@@ -46,5 +46,5 @@ app.get('/weather', (request, response) => {
    response.status(500).send('Something went wrong!');
  }
 })
-app.listen(PORT, () => { console.log(app is up on PORT ${PORT}) });
+app.listen(PORT, () => { console.log(`app is up on PORT ${PORT}`) });
 
