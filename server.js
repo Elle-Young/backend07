@@ -4,28 +4,33 @@ const cors = require('cors');
 require('dotenv').config();
 const app = express();
 app.use(cors());
+const superagent = require('superagent');
 const PORT = process.env.PORT;
 // LOCATION DATA
-function FormattedData(searchQuery, formattedQuery, latitude, longitude) {
- this.search_query = searchQuery;
- this.formatted_query = formattedQuery;
- this.latitude = latitude;
- this.longitude = longitude;
+function FormattedData(data) {
+ this.search_query = data.results[0].formatted_address;
+ this.formatted_query = data.formattedQuery;
+ this.latitude = data.results[0].geometry.bounds.latitude;
+ this.longitude = data.results[0].geometry.bounds.longitude;
 }
+
+
 app.get('/location', (request, response) => {
- const geoData = require('./data/geo.json');
- const searchQuery = request.query.data;
- try {
-   const formattedQuery = geoData.results[0].formatted_address;
-   const lat = geoData.results[0].geometry.location.lat;
-   const lng = geoData.results[0].geometry.location.lng;
-   response.send(new FormattedData(searchQuery, formattedQuery, lat, lng));
- } catch (error) {
-   console.error(error);
-   if(!searchQuery){  // <------------ how to identify isolation of this.
-     response.status(500).send('Something went wrong!');
-   }
- }
+  const searchQuery = request.query.data;
+  console.log(searchQuery);
+  const urlToVisit = `https://maps.googleapis.com/maps/api/geocode/json?address=${searchQuery}&key=${process.env.GOOGLE_MAPS}`;
+  
+  return superagent.get(urlToVisit)
+    .then(data =>{
+      console.log(data.text);
+      new FormattedData(data.text);
+      console.log(geoData);
+      ;
+
+ }).catch(error => {
+  response.status(500).send(error.message);
+  console.error(error);
+});
 })
 // WEATHER DATA
 function WeatherGetter(weatherValue) {
@@ -47,4 +52,3 @@ app.get('/weather', (request, response) => {
  }
 })
 app.listen(PORT, () => { console.log(`app is up on PORT ${PORT}`) });
-
