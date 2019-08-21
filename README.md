@@ -25,7 +25,11 @@ This application was designed with JavaScript
 08-20-2019 10:35am - Deployed to Heroku.
 08-20-2019 1:50pm - Weather data time is now converted from milliseconds into a date.
 ## Credits and Collaborations
-* Susanna Lakey
+* Susanna Lakey, Elle Young, Sharina Stubbs
+
+*https://city301d50lab7.herokuapp.com/location
+
+*https://city301d50lab7.herokuapp.com/weather
 # Features
 Number and name of feature: Location and Weather
 Estimate of time needed to complete: 4 hours
